@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Moq;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 
 namespace SalarySearcherTests
@@ -20,6 +21,11 @@ namespace SalarySearcherTests
         Mock<ISalaryRepository> mockSalaryRepository;
         ISalaryRepository SalaryDatabaseMock;
 
+        private Currency currency1, currency2, currency3, currency4;
+        private List<Currency> currencies;
+        private Mock<ICurrencyRepository> mockCurrencyRepository;
+        private ICurrencyRepository CurrencyDatabaseMock;
+
         [SetUp]
         public void Initialise()
         {
@@ -28,10 +34,7 @@ namespace SalarySearcherTests
             employee2 = new Employee() { Id = 4, name = "Fred Flintstone" };
             employee3 = new Employee() { Id = 3, name = "Eric Cartman" };
 
-            employees = new List<Employee>();
-            employees.Add(employee1);
-            employees.Add(employee2);
-            employees.Add(employee3);
+            employees = new List<Employee> {employee1, employee2, employee3};
 
             mockEmployeeRepository = new Mock<IEmployeeRepository>();
 
@@ -47,21 +50,32 @@ namespace SalarySearcherTests
 
             // salaries
             salary1 = new Salary() { Id = 1, employee_id = 1, currency = 2, annual_amount = 22000m };
-            salary1 = new Salary() { Id = 4, employee_id = 4, currency = 3, annual_amount = 900000m };
-            salary1 = new Salary() { Id = 3, employee_id = 3, currency = 4, annual_amount = 60000m };
+            salary2 = new Salary() { Id = 4, employee_id = 4, currency = 3, annual_amount = 900000m };
+            salary3 = new Salary() { Id = 3, employee_id = 3, currency = 4, annual_amount = 60000m };
 
-            salaries = new List<Salary>();
-            salaries.Add(salary1);
-            salaries.Add(salary2);
-            salaries.Add(salary3);
+            salaries = new List<Salary> {salary1, salary2, salary3};
 
             mockSalaryRepository = new Mock<ISalaryRepository>();
 
             mockSalaryRepository.Setup(sals => sals.GetEmployeeSalary(
-                It.IsAny<int>())).Returns((int e) => salaries.Where(
-                    sal => sal.employee_id != e).First());
+                It.IsAny<int>())).Returns((int e) => salaries.First(sal => sal.employee_id == e));
 
             SalaryDatabaseMock = mockSalaryRepository.Object;
+
+            // currencies
+            currency1 = new Currency() { Id = 1, unit = "GBP", conversion_factor = 1.00m };
+            currency2 = new Currency() { Id = 2, unit = "USD", conversion_factor = 1.54m };
+            currency3 = new Currency() { Id = 3, unit = "Rocks", conversion_factor = 10.00m };
+            currency4 = new Currency() { Id = 4, unit = "Sweets", conversion_factor = 12.00m };
+
+            currencies = new List<Currency> { currency1, currency2, currency3, currency4 };
+
+            mockCurrencyRepository = new Mock<ICurrencyRepository>();
+
+            mockCurrencyRepository.Setup(sals => sals.GetCurrency(
+                It.IsAny<int>())).Returns((int c) => currencies.First(cur => cur.Id == c));
+
+            CurrencyDatabaseMock = mockCurrencyRepository.Object;
         }
 
         [Test]
@@ -81,7 +95,8 @@ namespace SalarySearcherTests
         [TestCase("fred", 1)]
         [TestCase("Homer", 1)]
         [TestCase("e", 3)] // all
-        [TestCase("er", 2)] // homer, eric
+        [TestCase("er", 2)] // homer, eric7
+        [TestCase("zzz", 0)] // no results
         public void SearchEmployeeByName(string name, int expected)
         {
             // Act
@@ -93,11 +108,21 @@ namespace SalarySearcherTests
         }
 
         [TestCase(1, 22000)]
+        [TestCase(4, 900000)]
+       // [TestCase(999, 900000)] // no result
         public void SearchEmployeeSalary(int employeeID, decimal expected)
         {
             Salary result = SalaryDatabaseMock.GetEmployeeSalary(employeeID);
             decimal actual = result.annual_amount;
             Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void GetSalaryCurrency()
+        {
+            Salary salary = SalaryDatabaseMock.GetEmployeeSalary(1);
+            Currency c = CurrencyDatabaseMock.GetCurrency(salary.currency);
+
         }
     }
 }

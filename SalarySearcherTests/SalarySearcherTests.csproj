@@ -72,7 +72,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Currency.cs" />
     <Compile Include="Employee.cs" />
+    <Compile Include="ICurrencyRepository.cs" />
     <Compile Include="IEmployeeRepository.cs" />
     <Compile Include="ISalaryRepository.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
