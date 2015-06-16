@@ -7,13 +7,14 @@ using SalarySearcherTests;
 
 namespace SalaryCheckerCMD
 {
-    public class SalarySearcher : IEmployeeRepository, ISalaryRepository, ICurrencyRepository
+    public class SalarySearcher// : IEmployeeRepository, ISalaryRepository, ICurrencyRepository
     {
-        public static object GetEmployeePayDetails()
+        public static object GetEmployeePayDetails(IEmployeeRepository e, ISalaryRepository s, ICurrencyRepository c)
         {
             return null;
         }
 
+        /*
         public Currency GetCurrency(int currencyID)
         {
             throw new NotImplementedException();
@@ -33,5 +34,6 @@ namespace SalaryCheckerCMD
         {
             throw new NotImplementedException();
         }
+        /**/
     }
 }
