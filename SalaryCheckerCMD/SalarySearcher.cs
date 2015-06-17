@@ -13,7 +13,7 @@ namespace SalaryCheckerCMD
         {
             return null;
         }
-
+        //ss
         /*
         public Currency GetCurrency(int currencyID)
         {
