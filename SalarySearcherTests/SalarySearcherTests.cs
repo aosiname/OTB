@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 namespace SalarySearcherTests
 {
     [TestFixture]
-    public class SalarySearcher
+    public class SalarySearcherTests
     {
         Employee employee1, employee2, employee3;
         List<Employee> employees;
@@ -122,7 +122,9 @@ namespace SalarySearcherTests
         {
             Salary salary = SalaryDatabaseMock.GetEmployeeSalary(1);
             Currency c = CurrencyDatabaseMock.GetCurrency(salary.currency);
-
+            string expected = "USD";
+            string actual = c.unit;
+            Assert.AreEqual(expected, actual);
         }
     }
 }

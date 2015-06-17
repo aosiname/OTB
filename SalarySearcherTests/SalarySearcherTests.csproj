@@ -83,7 +83,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Salary.cs" />
-    <Compile Include="SalarySearcher.cs" />
+    <Compile Include="SalarySearcherTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
