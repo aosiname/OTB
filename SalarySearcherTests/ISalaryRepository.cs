@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SalarySearcherTests
 {
-    interface ISalaryRepository
+    public interface ISalaryRepository
     {
         Salary GetEmployeeSalary(int employeeID);
     }

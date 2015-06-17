@@ -9,10 +9,25 @@ namespace SalaryCheckerCMD
 {
     public class SalarySearcher// : IEmployeeRepository, ISalaryRepository, ICurrencyRepository
     {
-        public static object GetEmployeePayDetails(IEmployeeRepository e, ISalaryRepository s, ICurrencyRepository c)
+        private readonly IEmployeeRepository _employeeRepository;
+        private readonly ICurrencyRepository _currencyRepository;
+        private readonly ISalaryRepository _salaryRepository;
+
+        public SalarySearcher(
+            IEmployeeRepository employeeRepository,
+            ICurrencyRepository currencyRepository,
+            ISalaryRepository salaryRepository)
         {
-            return null;
+            _employeeRepository = employeeRepository;
+            _currencyRepository = currencyRepository;
+            _salaryRepository = salaryRepository;
         }
+
+        public IEnumerable<Employee> GetEmployee(string name)
+        {
+            return this._employeeRepository.FindByName(name);
+        }
+
         //ss
         /*
         public Currency GetCurrency(int currencyID)

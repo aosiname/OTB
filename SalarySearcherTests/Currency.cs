@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SalarySearcherTests
 {
-    class Currency
+    public class Currency
     {
         public int Id { get; set; }
 
